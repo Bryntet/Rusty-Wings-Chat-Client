@@ -1,13 +1,13 @@
-import 'package:catppuccin_flutter/catppuccin_flutter.dart';
-import 'package:chat_app_client/main.dart';
 import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
 import 'create_user_screen.dart'; // Import your CreateUserScreen
 import 'login_screen.dart';
-import 'messages_screen.dart'; // Import your MessagesScreen
+// Import your MessagesScreen
 
 class HomeScreen extends StatelessWidget {
   final colorMap = getColorMap();
+
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,30 +23,30 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              child: const Text('Create User'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CreateUserScreen()),
+                  MaterialPageRoute(builder: (context) => const CreateUserScreen()),
                 );
 
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorMap['green'],
               ),
+              child: const Text('Create User'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              child: const Text('Login'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginUserScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginUserScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorMap['lavender'],
               ),
+              child: const Text('Login'),
             ),
             // Add more buttons for other functionalities
           ],

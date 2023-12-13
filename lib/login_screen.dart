@@ -1,11 +1,12 @@
 import 'package:chat_app_client/conversations_screen.dart';
 import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
-import 'messages_screen.dart';
 import 'user.dart';
 import 'api_service.dart';
 
 class LoginUserScreen extends StatefulWidget {
+  const LoginUserScreen({super.key});
+
   @override
   _LoginUserScreenState createState() => _LoginUserScreenState();
 }
@@ -35,23 +36,23 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login as id'),
+        title: const Text('Login as id'),
         foregroundColor: colorMap["lavender"],
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'ID'),
+              decoration: const InputDecoration(labelText: 'ID'),
             ),
             ElevatedButton(
               onPressed: _getUser,
-              child: Text('Login'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorMap['lavender'], // Use lavender color from colorMap
               ),
+              child: const Text('Login'),
             ),
           ],
         ),

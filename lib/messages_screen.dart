@@ -10,7 +10,7 @@ class MessagesScreen extends StatefulWidget {
   final Conversation conversation;
   final User user;
 
-  MessagesScreen({Key? key, required this.conversation, required this.user}) : super(key: key);
+  const MessagesScreen({Key? key, required this.conversation, required this.user}) : super(key: key);
 
   @override
   _MessagesScreenState createState() => _MessagesScreenState();

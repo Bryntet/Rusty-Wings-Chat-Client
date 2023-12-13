@@ -17,7 +17,7 @@ class User {
 class UserDataInherited extends InheritedWidget {
   final User data;
 
-  UserDataInherited({Key? key, required this.data, required Widget child})
+  const UserDataInherited({Key? key, required this.data, required Widget child})
       : super(key: key, child: child);
 
   static UserDataInherited? of(BuildContext context) {

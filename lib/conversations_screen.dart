@@ -110,8 +110,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddConversationDialog(context),
-        child: Icon(Icons.add),
         tooltip: 'Create New Conversation',
+        child: const Icon(Icons.add),
       ),
     );
   }
