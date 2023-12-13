@@ -7,11 +7,10 @@ import 'login_screen.dart';
 class HomeScreen extends StatelessWidget {
   final colorMap = getColorMap();
 
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -26,9 +25,9 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CreateUserScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const CreateUserScreen()),
                 );
-
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorMap['green'],
@@ -40,7 +39,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginUserScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const LoginUserScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -52,7 +52,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-
     );
   }
 }
