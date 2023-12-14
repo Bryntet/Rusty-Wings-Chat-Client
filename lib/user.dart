@@ -8,7 +8,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['user_id'],
+      userId: json['id'],
       username: json['username'],
     );
   }
@@ -30,13 +30,12 @@ class UserDataInherited extends InheritedWidget {
   }
 }
 
-
 class NewUser {
   final String username;
 
   NewUser({required this.username});
 
   Map<String, dynamic> toJson() => {
-    'username': username,
-  };
+        'username': username,
+      };
 }

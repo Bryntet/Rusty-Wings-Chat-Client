@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app_client/conversations_screen.dart';
 import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     String id = _usernameController.text;
     try {
       User user = await _apiService.getUser(id);
+      log(user.toString());
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -45,12 +48,13 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
           children: <Widget>[
             TextField(
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'ID'),
+              decoration: InputDecoration(labelText: 'ID', filled: true),
             ),
             ElevatedButton(
               onPressed: _getUser,
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorMap['lavender'], // Use lavender color from colorMap
+                backgroundColor:
+                    colorMap['lavender'], // Use lavender color from colorMap
               ),
               child: const Text('Login'),
             ),

@@ -26,41 +26,83 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   void _showAddConversationDialog(BuildContext context) {
     TextEditingController receiverIdController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    bool _isButtonPressed =
+        false; // Flag to track if the 'Create' button was pressed
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('New Conversation'),
-          content: TextField(
-            controller: receiverIdController,
-            decoration: const InputDecoration(hintText: "Receiver ID"),
-            keyboardType: TextInputType.number, // Since ID is a number
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Create'),
-              onPressed: () {
-                int receiverId = int.tryParse(receiverIdController.text) ?? 0;
-                _createNewConversation(receiverId);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          // Use StatefulBuilder to update the state of the dialog
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('New Conversation'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      hintText: "Title",
+                      errorText:
+                          _isButtonPressed && titleController.text.isEmpty
+                              ? 'Title cannot be empty'
+                              : null,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  // Adds a small space between the text fields
+                  TextField(
+                    controller: receiverIdController,
+                    decoration: InputDecoration(
+                      hintText: "Receiver ID",
+                      errorText:
+                          _isButtonPressed && receiverIdController.text.isEmpty
+                              ? 'Receiver ID cannot be empty'
+                              : null,
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Create'),
+                  onPressed: () {
+                    if (titleController.text.isEmpty ||
+                        receiverIdController.text.isEmpty) {
+                      setState(() {
+                        // Call setState to update the dialog's state
+                        _isButtonPressed =
+                            true; // Update the flag when the button is pressed
+                      });
+                    } else {
+                      int receiverId =
+                          int.tryParse(receiverIdController.text) ?? 0;
+                      String title = titleController.text;
+                      _createNewConversation(receiverId, title);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  void _createNewConversation(int receiverId) async {
-    NewConversation newConversation =
-        NewConversation(sender: widget.user.userId, receiver: receiverId);
+  void _createNewConversation(int receiverId, String title) async {
+    NewConversation newConversation = NewConversation(
+        sender: widget.user.userId, receiver: receiverId, title: title);
 
     try {
       Conversation conversation =
@@ -102,8 +144,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
               );
             },
             child: ListTile(
-              subtitle: Text(_conversations[index].id.toString()),
-              title: Text('Conversation ${_conversations[index].id}'),
+              subtitle: Text('Conversation id: ${_conversations[index].id}'),
+              title: Text('Convo title: ${_conversations[index].title}'),
             ),
           );
         },

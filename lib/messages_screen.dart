@@ -10,7 +10,9 @@ class MessagesScreen extends StatefulWidget {
   final Conversation conversation;
   final User user;
 
-  const MessagesScreen({Key? key, required this.conversation, required this.user}) : super(key: key);
+  const MessagesScreen(
+      {Key? key, required this.conversation, required this.user})
+      : super(key: key);
 
   @override
   _MessagesScreenState createState() => _MessagesScreenState();
@@ -32,16 +34,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
   void initState() {
     super.initState();
     _loadMessages();
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (Timer t) => _loadMessages());
+    _loadUsernames();
+    _timer = Timer.periodic(const Duration(milliseconds: 500),
+        (Timer t) => _checkForUpdateMessages());
   }
-
 
   void _sendMessage(String message) async {
     if (message != "") {
       await _apiService.createMessage(NewMessage(
-      conversationId: widget.conversation.id,
-      userId: widget.user.userId,
-      messageContent: message));
+          conversationId: widget.conversation.id,
+          userId: widget.user.userId,
+          messageContent: message));
       _loadMessages();
       _textController.clear();
       _focusNode.requestFocus(); // Refocus the text field
@@ -50,10 +53,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   void _loadMessages() async {
     List<Message> messages = await _apiService.getMessages(widget.conversation);
+    _updateMessages(messages);
+  }
+
+  void _checkForUpdateMessages() async {
+    List<Message> messages = await _apiService.getMessages(widget.conversation);
+    if (_messages != messages) {
+      _updateMessages(messages);
+    }
+  }
+
+  void _updateMessages(List<Message> messages) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     setState(() {
       _messages = messages;
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     _loadUsernames();
   }
 
@@ -62,17 +76,15 @@ class _MessagesScreenState extends State<MessagesScreen> {
     List<Future> futures = [];
 
     for (int userId in userIds) {
-      futures.add(
-          _apiService.getUser(userId.toString()).then((user) {
-            userIdToUsernameMap[userId] = user.username;
-          })
-      );
+      futures.add(_apiService.getUser(userId.toString()).then((user) {
+        userIdToUsernameMap[userId] = user.username;
+      }));
     }
     await Future.wait(futures);
 
     setState(() {});
   }
-  
+
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -86,7 +98,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
         title: const Text('Messages'),
       ),
       body: Column(
-
         children: [
           Expanded(
             child: ListView.builder(
@@ -101,11 +112,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       : "${userIdToUsernameMap[message.userId]}:"),
                   titleTextStyle: const TextStyle(),
                   leadingAndTrailingTextStyle: TextStyle(
-                    color: colorMap["lavender"]!,
-                    fontWeight: FontWeight.bold
-
-                  ),
-
+                      color: colorMap["lavender"]!,
+                      fontWeight: FontWeight.bold),
                 );
               },
             ),
@@ -117,29 +125,27 @@ class _MessagesScreenState extends State<MessagesScreen> {
               focusNode: _focusNode,
               autofocus: true,
               decoration: InputDecoration(
-                labelText: 'Write here :)',
-                labelStyle: TextStyle(
-                  color: colorMap['text'],
-                ),
-
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: colorMap['surface0']!,
+                  labelText: 'Write here :)',
+                  labelStyle: TextStyle(
+                    color: colorMap['text'],
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: colorMap['surface0']!,
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: colorMap['surface0']!,
+                    ),
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: colorMap['lavender']!,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: colorMap['surface0']!,
+                    ),
                   ),
-                ),
-                focusColor: colorMap['lavender'],
-
-              ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: colorMap['lavender']!,
+                    ),
+                  ),
+                  focusColor: colorMap['lavender'],
+                  filled: false),
               style: TextStyle(
                 fontSize: 14,
                 color: colorMap['text'],
@@ -148,7 +154,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 _sendMessage(value);
               },
             ),
-
           ),
         ],
       ),
@@ -170,6 +175,3 @@ class _MessagesScreenState extends State<MessagesScreen> {
     super.dispose();
   }
 }
-
-
-

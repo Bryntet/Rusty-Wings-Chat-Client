@@ -1,22 +1,23 @@
 class Conversation {
   final int id;
-  Conversation({required this.id});
+  final String title;
+
+  Conversation({required this.id, required this.title});
 
   factory Conversation.fromJson(Map<String, dynamic> json) {
-    return Conversation(
-      id: json['conversation_id'],
-    );
+    return Conversation(id: json['id'], title: json['title']);
   }
 }
 
 class NewConversation {
   final int sender;
   final int receiver;
-  NewConversation({required this.sender, required this.receiver});
+  final String title;
+
+  NewConversation(
+      {required this.sender, required this.receiver, required this.title});
+
   Map<String, dynamic> toJson() {
-    return {
-      'sender': sender,
-      'receiver': receiver,
-    };
+    return {'sender': sender, 'receiver': receiver, 'title': title};
   }
 }

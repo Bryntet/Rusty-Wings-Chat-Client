@@ -1,4 +1,3 @@
-
 class Message {
   final int messageId;
   final int conversationId;
@@ -16,7 +15,7 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      messageId: json['message_id'],
+      messageId: json['id'],
       conversationId: json['conversation_id'],
       userId: json['user_id'],
       timestamp: DateTime.parse(json['timestamp']),
@@ -25,17 +24,17 @@ class Message {
   }
 }
 
-
-
 class NewMessage {
   final int conversationId;
   final int userId;
   final String messageContent;
+
   NewMessage({
     required this.conversationId,
     required this.userId,
     required this.messageContent,
   });
+
   Map<String, dynamic> toJson() {
     return {
       'conversation_id': conversationId,

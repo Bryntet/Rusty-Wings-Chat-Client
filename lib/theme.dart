@@ -2,66 +2,87 @@ import 'package:catppuccin_flutter/catppuccin_flutter.dart';
 import 'package:flutter/material.dart';
 
 ThemeData catppuccinTheme(Flavor flavor) {
-  Color primaryColor = flavor.lavender;
-  Color secondaryColor = flavor.mauve;
+  // Define the colors as per the style guide
+  Color backgroundColor = flavor.base; // Background Pane
+  Color secondaryPaneColor = flavor.mantle; // Secondary Panes
+  Color surfaceElementColor = flavor.surface0; // Surface Elements
+  Color overlayColor = flavor.overlay0; // Overlays
+  Color bodyCopyColor = flavor.text; // Body Copy
+  Color headlineColor = flavor.text; // Main Headline
+  Color subHeadlineColor = flavor.subtext0; // Sub-Headlines, Labels
+  Color linkColor = flavor.blue; // Links, URLs
+  Color successColor = flavor.green; // Success
+  Color warningColor = flavor.yellow; // Warnings
+  Color errorColor = flavor.red; // Errors
+  Color tagColor = flavor.blue; // Tags, Pills
+  Color selectionBackgroundColor =
+      flavor.surface2.withOpacity(0.4); // Selection Background
+  Color cursorColor = flavor.rosewater; // Cursor
+
   return ThemeData(
       useMaterial3: true,
       appBarTheme: AppBarTheme(
-          elevation: 0,
-          titleTextStyle: TextStyle(
-              color: flavor.text, fontSize: 20, fontWeight: FontWeight.bold),
-          backgroundColor: flavor.mantle,
-          foregroundColor: flavor.lavender),
-      colorScheme: ColorScheme(
-        background: flavor.base,
-        brightness: Brightness.light,
-        error: flavor.surface2,
-        onBackground: flavor.text,
-        onError: flavor.red,
-        onPrimary: primaryColor,
-        onSecondary: secondaryColor,
-        onSurface: primaryColor,
-        primary: flavor.crust,
-        secondary: flavor.mantle,
-        surface: flavor.surface0,
+        elevation: 0,
+        titleTextStyle: TextStyle(
+          color: headlineColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: secondaryPaneColor,
+        foregroundColor: flavor.lavender,
       ),
-      textTheme: const TextTheme().apply(
-        bodyColor: flavor.text,
-        displayColor: primaryColor,
+      colorScheme: ColorScheme(
+        background: backgroundColor,
+        brightness: Brightness.light,
+        error: errorColor,
+        onBackground: bodyCopyColor,
+        onError: errorColor,
+        onPrimary: flavor.crust,
+        onSecondary: secondaryPaneColor,
+        onSurface: surfaceElementColor,
+        primary: flavor.crust,
+        secondary: secondaryPaneColor,
+        surface: surfaceElementColor,
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: bodyCopyColor),
+        bodyMedium: TextStyle(color: bodyCopyColor),
+        displayLarge: TextStyle(color: headlineColor),
+        displayMedium: TextStyle(color: subHeadlineColor),
+        displaySmall: TextStyle(color: subHeadlineColor),
+        headlineMedium: TextStyle(color: subHeadlineColor),
+        headlineSmall: TextStyle(color: subHeadlineColor),
+        titleLarge: TextStyle(color: subHeadlineColor),
+        titleMedium: TextStyle(color: subHeadlineColor),
+        titleSmall: TextStyle(color: subHeadlineColor),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: flavor.surface0,
+          disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: surfaceElementColor),
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: flavor.surface0,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: flavor.overlay2),
           ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: flavor.lavender,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: flavor.lavender),
           ),
-        ),
-        focusColor: flavor.lavender,
-        hintStyle: TextStyle(
-          color: flavor.text,
-        ),
-
-      ),
+          focusColor: flavor.lavender,
+          hintStyle: TextStyle(color: flavor.text),
+          labelStyle: TextStyle(color: flavor.text),
+          fillColor: flavor.surface0,
+          filled: false),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 0,
-        foregroundColor: primaryColor,
-        backgroundColor: flavor.mantle,
-      ));
+        foregroundColor: tagColor,
+        backgroundColor: secondaryPaneColor,
+      ),
+      listTileTheme: ListTileThemeData(
+          tileColor: flavor.surface0,
+          titleTextStyle: TextStyle(color: flavor.text)));
 }
 
-
-
 Map<String, Color> getColorMap() {
-  Flavor flavor= catppuccin.macchiato;
+  Flavor flavor = catppuccin.macchiato;
   Map<String, Color> colorMap = {
     "rosewater": flavor.rosewater,
     "flamingo": flavor.flamingo,

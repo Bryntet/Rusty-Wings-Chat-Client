@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:chat_app_client/conversation.dart';
 import 'package:http/http.dart' as http;
 import 'message.dart';
-import 'user.dart';  // Import other model files accordingly
+import 'user.dart'; // Import other model files accordingly
 
 class ApiService {
   final String baseUrl;
@@ -22,14 +23,16 @@ class ApiService {
     if (response.statusCode == 200) {
       // Assuming the response contains the user ID
       var data = json.decode(response.body);
-      return User.fromJson(data); // Adjust based on your actual response structure
+      return User.fromJson(
+          data); // Adjust based on your actual response structure
     } else {
       throw Exception('Failed to create user');
     }
   }
 
   Future<List<Conversation>> getConversationsFromUser(User user) async {
-    final response = await http.get(Uri.parse('$baseUrl/conversations/${user.userId}'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/conversations/${user.userId}'));
 
     if (response.statusCode == 200) {
       List<dynamic> convsJson = json.decode(response.body);
@@ -40,7 +43,8 @@ class ApiService {
   }
 
   Future<List<Message>> getMessages(Conversation conv) async {
-    final response = await http.get(Uri.parse('$baseUrl/conversation/${conv.id}'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/conversation/${conv.id}'));
     if (response.statusCode == 200) {
       List<dynamic> messagesJson = json.decode(response.body);
       return messagesJson.map((json) => Message.fromJson(json)).toList();
@@ -51,6 +55,7 @@ class ApiService {
 
   Future<User> getUser(String userId) async {
     final response = await http.get(Uri.parse('$baseUrl/user/$userId'));
+    log(response.toString());
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
@@ -61,7 +66,6 @@ class ApiService {
   }
 
   Future<Message> createMessage(NewMessage message) async {
-
     final response = await http.post(
       Uri.parse('$baseUrl/create-message'),
       headers: <String, String>{
@@ -78,7 +82,9 @@ class ApiService {
     }
   }
 
-  Future<Conversation> createConversation(NewConversation newConversation) async {
+  Future<Conversation> createConversation(
+      NewConversation newConversation) async {
+    log(newConversation.toJson().toString());
     final response = await http.post(
       Uri.parse('$baseUrl/create-conversation'),
       headers: <String, String>{
@@ -86,7 +92,6 @@ class ApiService {
       },
       body: jsonEncode(newConversation.toJson()),
     );
-
     if (response.statusCode == 200) {
       return Conversation.fromJson(json.decode(response.body));
     } else {
