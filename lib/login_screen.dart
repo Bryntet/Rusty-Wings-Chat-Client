@@ -23,7 +23,6 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
     String id = _usernameController.text;
     try {
       User user = await _apiService.getUser(id);
-      log(user.toString());
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -39,7 +38,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login as id'),
+        title: const Text('Login with username'),
         foregroundColor: colorMap["lavender"],
       ),
       body: Padding(
@@ -48,7 +47,8 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
           children: <Widget>[
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'ID', filled: true),
+              decoration:
+                  const InputDecoration(labelText: 'Username', filled: true),
             ),
             ElevatedButton(
               onPressed: _getUser,

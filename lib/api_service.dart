@@ -55,7 +55,6 @@ class ApiService {
 
   Future<User> getUser(String userId) async {
     final response = await http.get(Uri.parse('$baseUrl/user/$userId'));
-    log(response.toString());
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
@@ -84,7 +83,6 @@ class ApiService {
 
   Future<Conversation> createConversation(
       NewConversation newConversation) async {
-    log(newConversation.toJson().toString());
     final response = await http.post(
       Uri.parse('$baseUrl/create-conversation'),
       headers: <String, String>{
@@ -96,6 +94,16 @@ class ApiService {
       return Conversation.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to create conversation');
+    }
+  }
+
+  Future<ConversationUser> getConversationUsers(String conversationId) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/conversation-users/$conversationId'));
+    if (response.statusCode == 200) {
+      return ConversationUser.fromJson(json.decode(response.body));
+    } else {
+      throw Exception("Failed to get users from conversation.");
     }
   }
 // Add similar methods for other endpoints...

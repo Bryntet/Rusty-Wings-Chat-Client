@@ -39,3 +39,15 @@ class NewUser {
         'username': username,
       };
 }
+
+class ConversationUser {
+  final int conversationId;
+  final int userId;
+  ConversationUser({required this.conversationId, required this.userId});
+  factory ConversationUser.fromJson(Map<String, dynamic> json) {
+    return ConversationUser(
+      userId: json['user_id'],
+      conversationId: json['conversation_id'],
+    );
+  }
+}

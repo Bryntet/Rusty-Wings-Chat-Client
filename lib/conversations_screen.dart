@@ -1,4 +1,5 @@
 import 'package:chat_app_client/conversation.dart';
+import 'package:chat_app_client/theme.dart';
 
 import 'messages_screen.dart';
 import 'user.dart';
@@ -130,25 +131,44 @@ class _ConversationScreenState extends State<ConversationScreen> {
       appBar: AppBar(
         title: const Text('Conversations'),
       ),
-      body: ListView.builder(
-        itemCount: _conversations.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MessagesScreen(
-                      conversation: _conversations[index], user: widget.user),
-                ),
-              );
-            },
-            child: ListTile(
-              subtitle: Text('Conversation id: ${_conversations[index].id}'),
-              title: Text('Convo title: ${_conversations[index].title}'),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              itemCount: _conversations.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MessagesScreen(
+                            conversation: _conversations[index],
+                            user: widget.user),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    subtitle:
+                        Text('Conversation users: ${_conversations[index].id}'),
+                    title: Text('Convo title: ${_conversations[index].title}'),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              widget.user.username,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: getColorMap()["blue"],
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddConversationDialog(context),
