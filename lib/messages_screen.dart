@@ -6,6 +6,8 @@ import 'package:chat_app_client/message.dart';
 import 'package:chat_app_client/conversation.dart';
 import 'dart:async';
 
+import 'globals.dart';
+
 class MessagesScreen extends StatefulWidget {
   final Conversation conversation;
   final User user;
@@ -22,7 +24,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Timer? _timer;
   final colorMap = getColorMap();
 
-  final ApiService _apiService = ApiService('http://localhost:3000');
+  final ApiService _apiService = ApiService(globalIP);
   List<Message> _messages = [];
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();

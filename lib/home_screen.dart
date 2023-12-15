@@ -2,12 +2,17 @@ import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
 import 'create_user_screen.dart'; // Import your CreateUserScreen
 import 'login_screen.dart';
+import 'globals.dart';
 // Import your MessagesScreen
 
 class HomeScreen extends StatelessWidget {
   final colorMap = getColorMap();
-
-  HomeScreen({super.key});
+  final TextEditingController _serverIpText = TextEditingController();
+  HomeScreen({Key? key}) : super(key: key) {
+    _serverIpText.addListener(() {
+      globalIP = "http://" + _serverIpText.text + ":3000";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +30,9 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const CreateUserScreen()),
+                  MaterialPageRoute(builder: (context) {
+                    return const CreateUserScreen();
+                  }),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -48,7 +54,10 @@ class HomeScreen extends StatelessWidget {
               ),
               child: const Text('Login'),
             ),
-            // Add more buttons for other functionalities
+            TextField(
+              controller: _serverIpText,
+              decoration: const InputDecoration(labelText: 'Custom ip:'),
+            ),
           ],
         ),
       ),

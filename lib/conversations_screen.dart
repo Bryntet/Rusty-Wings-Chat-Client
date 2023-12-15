@@ -1,6 +1,7 @@
 import 'package:chat_app_client/conversation.dart';
 import 'package:chat_app_client/theme.dart';
 
+import 'globals.dart';
 import 'messages_screen.dart';
 import 'user.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ConversationScreen extends StatefulWidget {
 }
 
 class _ConversationScreenState extends State<ConversationScreen> {
-  final ApiService _apiService = ApiService('http://localhost:3000');
+  final ApiService _apiService = ApiService(globalIP);
   final List<Conversation> _conversations = [];
   bool userDoesNotExist = false;
 

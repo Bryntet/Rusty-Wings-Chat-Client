@@ -114,7 +114,7 @@ class ApiService {
     final response =
         await http.get(Uri.parse('$baseUrl/user-exists/$username'));
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      return bool.parse(response.body);
     } else {
       return false;
     }

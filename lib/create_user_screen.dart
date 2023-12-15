@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:chat_app_client/conversations_screen.dart';
 import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
+import 'globals.dart';
 import 'user.dart';
 import 'api_service.dart';
 
@@ -14,7 +17,7 @@ class CreateUserScreen extends StatefulWidget {
 class _CreateUserScreenState extends State<CreateUserScreen> {
   final colorMap = getColorMap();
   final TextEditingController _usernameController = TextEditingController();
-  final ApiService _apiService = ApiService('http://localhost:3000');
+  final ApiService _apiService = ApiService(globalIP);
 
   void _createUser() async {
     NewUser newUser = NewUser(username: _usernameController.text);

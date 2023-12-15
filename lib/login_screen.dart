@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_app_client/conversations_screen.dart';
 import 'package:chat_app_client/theme.dart';
 import 'package:flutter/material.dart';
+import 'globals.dart';
 import 'user.dart';
 import 'api_service.dart';
 
@@ -17,22 +18,18 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   final colorMap = getColorMap();
 
   final TextEditingController _usernameController = TextEditingController();
-  final ApiService _apiService = ApiService('http://localhost:3000');
+  final ApiService _apiService = ApiService(globalIP);
 
   void _getUser() async {
     String id = _usernameController.text;
-    try {
-      User? user = await _apiService.getUser(id);
-      if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConversationScreen(user: user),
-          ),
-        );
-      }
-    } catch (e) {
-      // Handle error
+    User? user = await _apiService.getUser(id);
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConversationScreen(user: user),
+        ),
+      );
     }
   }
 
