@@ -53,14 +53,17 @@ class ApiService {
     }
   }
 
-  Future<User> getUser(String userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/user/$userId'));
-
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      return User.fromJson(data);
+  Future<User?> getUser(String username) async {
+    if (await userExists(username)) {
+      final response = await http.get(Uri.parse('$baseUrl/user/$username'));
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        return User.fromJson(data);
+      } else {
+        throw Exception('Failed to load user');
+      }
     } else {
-      throw Exception('Failed to load user');
+      return null;
     }
   }
 
@@ -104,6 +107,16 @@ class ApiService {
       return ConversationUser.fromJson(json.decode(response.body));
     } else {
       throw Exception("Failed to get users from conversation.");
+    }
+  }
+
+  Future<bool> userExists(String username) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl/user-exists/$username'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return false;
     }
   }
 // Add similar methods for other endpoints...

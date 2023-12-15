@@ -22,13 +22,15 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   void _getUser() async {
     String id = _usernameController.text;
     try {
-      User user = await _apiService.getUser(id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConversationScreen(user: user),
-        ),
-      );
+      User? user = await _apiService.getUser(id);
+      if (user != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConversationScreen(user: user),
+          ),
+        );
+      }
     } catch (e) {
       // Handle error
     }

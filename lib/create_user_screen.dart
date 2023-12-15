@@ -7,7 +7,6 @@ import 'api_service.dart';
 class CreateUserScreen extends StatefulWidget {
   const CreateUserScreen({super.key});
 
-
   @override
   _CreateUserScreenState createState() => _CreateUserScreenState();
 }
@@ -45,12 +44,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
-
             ),
             ElevatedButton(
               onPressed: _createUser,
               style: ElevatedButton.styleFrom(
-                backgroundColor: colorMap['green'], // Use lavender color from colorMap
+                backgroundColor:
+                    colorMap['green'], // Use lavender color from colorMap
               ),
               child: const Text('Create User'),
             ),

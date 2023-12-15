@@ -18,6 +18,7 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   final ApiService _apiService = ApiService('http://localhost:3000');
   final List<Conversation> _conversations = [];
+  bool userDoesNotExist = false;
 
   @override
   void initState() {
@@ -26,9 +27,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   void _showAddConversationDialog(BuildContext context) {
-    TextEditingController receiverIdController = TextEditingController();
+    TextEditingController recieverUsernameController = TextEditingController();
     TextEditingController titleController = TextEditingController();
-    bool _isButtonPressed =
+    bool isButtonPressed =
         false; // Flag to track if the 'Create' button was pressed
 
     showDialog(
@@ -46,23 +47,23 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     controller: titleController,
                     decoration: InputDecoration(
                       hintText: "Title",
-                      errorText:
-                          _isButtonPressed && titleController.text.isEmpty
-                              ? 'Title cannot be empty'
-                              : null,
+                      errorText: isButtonPressed && titleController.text.isEmpty
+                          ? 'Title cannot be empty'
+                          : null,
                     ),
                   ),
                   SizedBox(height: 8),
                   // Adds a small space between the text fields
-                  TextField(
-                    controller: receiverIdController,
+                  TextFormField(
+                    controller: recieverUsernameController,
                     decoration: InputDecoration(
-                      hintText: "Receiver ID",
-                      errorText:
-                          _isButtonPressed && receiverIdController.text.isEmpty
-                              ? 'Receiver ID cannot be empty'
-                              : null,
-                    ),
+                        hintText: "Receiver Username",
+                        errorText: isButtonPressed &&
+                                recieverUsernameController.text.isEmpty
+                            ? 'Receiver Username cannot be empty'
+                            : (isButtonPressed && userDoesNotExist
+                                ? 'User does not exist.'
+                                : null)),
                     keyboardType: TextInputType.number,
                   ),
                 ],
@@ -78,17 +79,23 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   child: const Text('Create'),
                   onPressed: () {
                     if (titleController.text.isEmpty ||
-                        receiverIdController.text.isEmpty) {
+                        recieverUsernameController.text.isEmpty) {
                       setState(() {
                         // Call setState to update the dialog's state
-                        _isButtonPressed =
+                        isButtonPressed =
                             true; // Update the flag when the button is pressed
                       });
                     } else {
-                      int receiverId =
-                          int.tryParse(receiverIdController.text) ?? 0;
-                      String title = titleController.text;
-                      _createNewConversation(receiverId, title);
+                      _apiService
+                          .getUser(recieverUsernameController.text)
+                          .then((value) => {
+                                if (value != null)
+                                  {
+                                    _createNewConversation(
+                                        value.username, titleController.text)
+                                  }
+                              });
+
                       Navigator.of(context).pop();
                     }
                   },
@@ -101,18 +108,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 
-  void _createNewConversation(int receiverId, String title) async {
-    NewConversation newConversation = NewConversation(
-        sender: widget.user.userId, receiver: receiverId, title: title);
+  void _createNewConversation(String receiver, String title) async {
+    if (await _apiService.userExists(receiver)) {
+      var res = await _apiService.getUser(receiver);
+      if (res != null) {
+        int userId = res.userId;
 
-    try {
-      Conversation conversation =
-          await _apiService.createConversation(newConversation);
-      setState(() {
-        _conversations.add(conversation);
-      });
-    } catch (e) {
-      // Handle any errors here
+        NewConversation newConversation = NewConversation(
+            sender: widget.user.userId, receiver: userId, title: title);
+        Conversation conversation =
+            await _apiService.createConversation(newConversation);
+        setState(() {
+          _conversations.add(conversation);
+        });
+      }
+    } else {
+      userDoesNotExist = true;
     }
   }
 

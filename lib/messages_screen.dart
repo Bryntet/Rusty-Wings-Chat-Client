@@ -77,7 +77,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
     for (int userId in userIds) {
       futures.add(_apiService.getUser(userId.toString()).then((user) {
-        userIdToUsernameMap[userId] = user.username;
+        if (user != null) {
+          userIdToUsernameMap[userId] = user.username;
+        }
       }));
     }
     await Future.wait(futures);
